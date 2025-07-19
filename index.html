@@ -3,7 +3,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>CyberPanel UI [UNLOCKED]</title>
+  <title>CyberPanel UI [MAXIMUM SCAN]</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -81,49 +81,58 @@ document.addEventListener('DOMContentLoaded', () => {
   const outputConsole = document.getElementById('outputConsole');
   const contentFrame = document.getElementById('contentFrame');
 
-  // --- НОВЫЙ БЛОК: ПОЛНЫЙ СПИСОК ПРОКСИ-СЕРВЕРОВ --- //
-  // ВНИМАНИЕ: Строго по вашему запросу, добавлен полный список.
-  // Многие из этих серверов не работают, не подходят для загрузки HTML или требуют спец. обработки.
-  // Они будут отмечены как [FAILED] в процессе проверки, что является частью демонстрации.
+  // --- НОВЫЙ БЛОК: МАКСИМАЛЬНЫЙ СПИСОК ПРОКСИ-СЕРВЕРОВ --- //
   const corsProxies = [
-    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-    u => `https://r.jina.ai/${u}`,
+    // --- Надёжные и быстрые ---
     u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
     u => `https://api.codetabs.com/v1/proxy?quest=${u}`,
-    u => `https://cors-anywhere.herokuapp.com/${u}`,
-    u => `https://cors-anywhere.com/${u}`,
+    u => `https://cors.eu.org/${u}`,
+    u => `https://r.jina.ai/${u}`,
+    u => `https://cors.x2u.in/${u}`,
+    
+    // --- Разные Cloudflare Workers / Vercel / и т.д. ---
+    u => `https://cors-anywhere.azm.workers.dev/${u}`,
+    u => `https://edge-cors.fly.dev/${u}`,
+    u => `https://g2tt-cors.vercel.app/?url=${encodeURIComponent(u)}`,
+    u => `https://cors-anywhere.pages.dev/${u}`,
+    u => `https://cors-buster-livid.vercel.app/api?url=${encodeURIComponent(u)}`,
+    u => `https://midhunhk-thingproxy.vercel.app/fetch/${encodeURIComponent(u)}`,
     u => `https://thingproxy.freeboard.io/fetch/${u}`,
-    u => `https://cors.sh/${u}`,
-    u => `https://cors-proxy.htmldriven.com/?url=${encodeURIComponent(u)}`,
-    u => `https://yacdn.org/proxy/${encodeURIComponent(u)}`,
-    u => `https://crossorigin.me/${u}`,
-    u => `https://cors.io/?${encodeURIComponent(u)}`,
-    u => `https://cors.now.sh/${u}`,
-    u => `https://test.cors.workers.dev/${u}`,
-    u => `https://corsproxy.github.io/?${encodeURIComponent(u)}`,
-    u => `https://crossproxy.me/${u}`,
-    u => `https://universal-cors-proxy.glitch.me/${u}`,
-    u => `http://coin-toss.herokuapp.com/${u}`,
+    u => `https://www.corsify.me/${u}`,
+    u => `https://cloudflare-cors-anywhere.workers.dev/${u}`,
+    u => `https://cors.isomorphic-git.org/?url=${encodeURIComponent(u)}`,
+    u => `https://bird.ioliu.cn/v1?url=${encodeURIComponent(u)}`,
+    u => `https://yacdn.org/proxy/${u}`,
+    
+    // --- Клоны CORS-Anywhere (часто с лимитами или неактивные) ---
+    u => `https://proxy.cors.sh/${u}`,
+    u => `https://cors.bridged.cc/${u}`,
+    u => `https://cors-anywhere.herokuapp.com/${u}`,
+    u => `https://dry-sierra-94326.herokuapp.com/${u}`,
+    u => `https://cors.proxy.wunderlist.com/${u}`,
+    u => `https://mycorsproxy.herokuapp.com/${u}`,
+    u => `https://galvanize-cors-proxy.herokuapp.com/${u}`,
     u => `https://free-cors-proxy.herokuapp.com/${u}`,
-    u => `https://corsproxy.our.buildo.io/${u}`,
+    u => `http://coin-toss.herokuapp.com/${u}`,
+    
+    // --- Прочие и старые серверы ---
+    u => `https://cors.lol/${u.replace(/^https?:\/\//,'')}`,
+    u => `https://everyorigin.jwvbremen.nl/get?url=${encodeURIComponent(u)}`,
+    u => `https://crossorigin.me/${u}`,
+    u => `https://cors-proxy.htmldriven.com/?url=${encodeURIComponent(u)}`,
     u => `http://gobetween.oklabs.org/pipe/${u}`,
     u => `http://cors.hyoo.ru/${u}`,
-    u => `https://cors4js.appspot.com/?url=${encodeURIComponent(u)}`,
-    u => `https://proxy-sauce.glitch.me/${u}`,
-    u => `http://www.corsproxy.com/${u}`,
-    u => `http://goxcors.appspot.com/${u}`,
-    u => `https://cors-proxy.taskcluster.net/${u}`,
-    u => `http://jsonp.herokuapp.com/?url=${encodeURIComponent(u)}`,
+    
+    // --- Специализированные или часто нерабочие (для полноты сканирования) ---
+    u => `https://jsonp.afeld.me/?url=${encodeURIComponent(u)}`,
+    u => `https://corsfix.com/raw?url=${encodeURIComponent(u)}`,
+    u => `https://crossproxy.me/${u}`,
+    u => `https://cors.io/?${u}`,
+    u => `https://cors.now.sh/${u}`,
     u => `http://anyorigin.com/go/?url=${encodeURIComponent(u)}`,
-    u => `http://corsy.rs.af.cm/?get=${encodeURIComponent(u)}`,
-    u => `https://galvanize-cors-proxy.herokuapp.com/${u}`,
-    u => `https://cors-buster.now.sh/?href=${encodeURIComponent(u)}`,
-    u => `https://cors.isomorphic-git.org/${u}`,
-    u => `https://cors.bridged.cc/${u}`,
-    // JSONP прокси, которые скорее всего вызовут ошибку, но включены для полноты проверки
-    u => `http://www.whateverorigin.org/get?url=${encodeURIComponent(u)}&callback=?`,
-    u => `https://jsonp.afeld.me/?callback=&url=${encodeURIComponent(u)}`,
-    u => `http://fuck-cors.com/?url=${encodeURIComponent(u)}`,
+    u => `http://www.whateverorigin.org/get?url=${encodeURIComponent(u)}`,
+    u => `https://universal-cors-proxy.glitch.me/${u}`,
   ];
 
   function shuffleArray(array) {
@@ -134,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return array;
   }
   
-  function getLoaderHTML() {
+  function getLoaderHTML(total) {
     return `
       <style>
         body { margin: 0; background: #0a0a0a; color: #0ff; font-family: monospace; display: flex; align-items: center; justify-content: center; height: 100vh; flex-direction: column; }
@@ -154,9 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
         .log-line .success { color: #10b981; font-weight: bold; }
         .log-line .fail { color: #ef4444; font-weight: bold; }
         .log-line .final-fail { color: #ef4444; font-size: 1.2rem; text-align: center; display: block; margin-top: 20px;}
+        .log-line .final-success { color: #10b981; font-size: 1.2rem; text-align: center; display: block; margin-top: 20px;}
       </style>
       <div class="loader-container">
-        <h1>SCANNING PROXY NODES...</h1>
+        <h1>SCANNING <span id="totalNodes">${total}</span> PROXY NODES...</h1>
         <div class="progress-bar">
           <div id="progressBarFill" class="progress-fill"></div>
         </div>
@@ -168,54 +178,54 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadProxiedContent() {
     const targetUrl = 'https://ot.imes.su';
     const shuffledProxies = shuffleArray([...corsProxies]);
+    const totalProxies = shuffledProxies.length;
     const iframeDoc = contentFrame.contentWindow.document;
 
     iframeDoc.open();
-    iframeDoc.write(getLoaderHTML());
+    iframeDoc.write(getLoaderHTML(totalProxies));
     iframeDoc.close();
 
     const progressBarFill = iframeDoc.getElementById('progressBarFill');
     const statusLog = iframeDoc.getElementById('statusLog');
     
-    logToConsole(`Начинаю сканирование ${shuffledProxies.length} прокси-нод... Цель: ${targetUrl}`);
+    logToConsole(`Начинаю сканирование ${totalProxies} прокси-нод... Цель: ${targetUrl}`);
 
     let contentLoaded = false;
-    for (let i = 0; i < shuffledProxies.length; i++) {
+    for (let i = 0; i < totalProxies; i++) {
       const proxyBuilder = shuffledProxies[i];
       const proxyUrl = proxyBuilder(targetUrl);
       const proxyName = new URL(proxyUrl).hostname;
-      const progress = Math.round(((i + 1) / shuffledProxies.length) * 100);
+      const progress = Math.round(((i + 1) / totalProxies) * 100);
 
-      // Обновляем прогресс бар
       if(progressBarFill) progressBarFill.style.width = `${progress}%`;
-
-      // Добавляем новую строку в лог
       const logLine = iframeDoc.createElement('div');
       logLine.className = 'log-line';
-      logLine.innerHTML = `<span>[TRYING]</span> Pinging ${proxyName}...`;
+      logLine.innerHTML = `<span>[${i+1}/${totalProxies}]</span> Pinging ${proxyName}...`;
       statusLog.appendChild(logLine);
-      statusLog.scrollTop = statusLog.scrollHeight; // Авто-прокрутка
-
-      logToConsole(`Попытка ${i + 1}/${shuffledProxies.length}: ${proxyName}`);
+      statusLog.scrollTop = statusLog.scrollHeight;
       
       try {
-        const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(6000) }); // Таймаут 6 секунд
+        const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(4000) });
         if (!response.ok) throw new Error(`Status: ${response.status}`);
         
         let html = await response.text();
         
-        // Простая проверка, не вернул ли прокси ошибку в виде JSON или простого текста
-        if (html.trim().startsWith('{') || html.length < 500) {
-            throw new Error("Invalid response format");
+        if (html.length < 500 || html.includes('herokuapp') || html.includes('Vercel') || html.trim().startsWith('{')) {
+            throw new Error("Invalid Content");
         }
         
         const baseTag = `<base href="${targetUrl}/">`;
         html = html.replace(/<head>/i, `<head>${baseTag}`);
         
-        logLine.innerHTML = `[<span class="success">SUCCESS</span>] Connection routed via ${proxyName}`;
+        logLine.innerHTML = `<span>[${i+1}/${totalProxies}]</span> [<span class="success">SUCCESS</span>] Connection routed via ${proxyName}`;
         
-        // Пауза для драматического эффекта
-        await new Promise(resolve => setTimeout(resolve, 500)); 
+        const successLine = iframeDoc.createElement('div');
+        successLine.className = 'log-line';
+        successLine.innerHTML = `<span class="final-success">[TARGET ACQUIRED]</span>`;
+        statusLog.appendChild(successLine);
+        statusLog.scrollTop = statusLog.scrollHeight;
+        
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
         iframeDoc.open();
         iframeDoc.write(html);
@@ -226,8 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         break; 
         
       } catch (error) {
-        logLine.innerHTML = `[<span class="fail">FAILED</span>] ${proxyName} (${error.message})`;
-        logToConsole(`Попытка ${i + 1} провалена: ${error.message}`, 'error');
+        logLine.innerHTML = `<span>[${i+1}/${totalProxies}]</span> [<span class="fail">FAILED</span>] ${proxyName} (${error.message})`;
       }
     }
 
@@ -255,18 +264,14 @@ document.addEventListener('DOMContentLoaded', () => {
       outputConsole.scrollTop = outputConsole.scrollHeight;
       setTimeout(() => e.classList.add('visible'), 10);
   };
-  const updateInfo = async () => { /* ... код без изменений ... */ };
-  const createActionButtons = () => { /* ... код без изменений ... */ };
-  const togglePanel = () => { /* ... код без изменений ... */ };
-  // --- Перезаливка функций, чтобы не скроллить ---
-  const updateInfoImpl = async () => {
+  const updateInfo = async () => {
     deviceInfo.textContent = 'АНАЛИЗ СИСТЕМЫ...';
     let ip = 'н/д';
     try { const res = await fetch('https://api.ipify.org?format=json'); ip = (await res.json()).ip; } catch {}
     const battery = navigator.getBattery ? await navigator.getBattery() : {};
     deviceInfo.textContent = `U-Agent: ${navigator.userAgent.substring(0,30)}...\nЭкран: ${screen.width}x${screen.height} | Онлайн: ${navigator.onLine?'Да':'Нет'}\nБатарея: ${battery.level?Math.round(battery.level*100)+'%':'н/д'} | ⚡: ${battery.charging?'Да':'Нет'}\nIP: ${ip} | Платформа: ${navigator.platform}`.trim();
   };
-  const createActionButtonsImpl = () => {
+  const createActionButtons = () => {
     actions.forEach(text => {
       const button = document.createElement('button');
       button.className = 'w-full py-1 px-2 bg-cyan-800/50 border border-cyan-600 text-cyan-300 font-semibold rounded hover:bg-pink-500 hover:text-black transition-all duration-200';
@@ -275,7 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
       buttonsContainer.appendChild(button);
     });
   };
-  const togglePanelImpl = () => {
+  const togglePanel = () => {
+    let isPanelOpen = document.body.classList.contains('panel-open');
     isPanelOpen = !isPanelOpen;
     document.body.classList.toggle('panel-open', isPanelOpen);
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -286,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isMobile) gsap.fromTo(panel, { y: '-50vh', opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" });
       else gsap.fromTo(panel, { x: -400, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power2.out" });
       logToConsole('Панель управления активирована.');
-      updateInfoImpl();
+      updateInfo();
     } else {
       playSound('audio-close');
       toggleBtn.innerText = '☣ Открыть панель';
@@ -297,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // --- Инициализация ---
-  toggleBtn.addEventListener('click', togglePanelImpl);
+  toggleBtn.addEventListener('click', togglePanel);
   execBtn.addEventListener('click', () => {
     const command = inputField.value.trim();
     if(command) { playSound('audio-exec'); logToConsole(`Выполнение: ${command}`, 'success'); inputField.value = ''; }
@@ -305,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   inputField.addEventListener('keydown', e => { if (e.key === 'Enter') execBtn.click(); });
   document.body.addEventListener('click', e => { if (e.target.tagName === 'BUTTON') playSound('audio-click'); });
-  createActionButtonsImpl();
+  createActionButtons();
   logToConsole('Система инициализирована.');
   loadProxiedContent();
 });
